@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body onload="load()">
+<script>
+</script>
+<form class="form-inline" id = "login" style="margin-left:450px; margin-top:120px;" onsubmit="login()" method="POST">
+  <div class="form-group">
+  
+    <label for="exampleInputName2">Username</label>
+    <input type="text" class="form-control" id="username" placeholder="username">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail2">Password</label>
+    <input type="password" class="form-control" id="password" placeholder="password">
+  </div>
+  <button type="submit" id="submit" class="btn btn-primary">Log In</button>
+  <br>
+  <div class="btn-group" style=" margin-top:30px;"" role="group" aria-label="..." >
+  <button type="button" id= "Admin" class="btn btn-default" style="width:200px;" onclick="admin()">Admin</button>
+  <button type="button" id= "Company"class="btn btn-default" style="width:200px;" onclick="company()">Company</button>
+  <button type="button" id= "Customer"class="btn btn-default" style="width:200px;" onclick="customer()">Customer</button>
+  <h5 style="margin-left:230px; margin-top:50px; color:grey;"><mark>Choose User Type</mark></h5>
+  <p id="demo"></p>
+</div>
+</form>
+<script>
+var choise;
+function admin(){
+	choise=Admin;
+}
+function company(){
+	choise=Company;
+}
+function customer(){
+	choise=Customer;
+}
+
+function login() {
+	var name;
+	var password;
+    var x = document.getElementById("login");
+    name= x.elements[0].value;
+    password = x.elements[1].value;
+  if(choise==Admin) {
+	x.action = "http://localhost:8080/CoupService/rest/admin/adminLogin?name="+name+"&password="+password;  
+  }
+  else if(choise==Company) {
+	x.action = "http://localhost:8080/CoupService/rest/company/companyLogin?name="+name+"&password="+password;  
+  }
+  else if(choise==Customer) {
+	x.action = "http://localhost:8080/CoupService/rest/customer/customerLogin?name="+name+"&password="+password;  
+}else{
+	alert("Please choose user type")
+}
+}
+
+
+
+</script>
+</body>
+</html>

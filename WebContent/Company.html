@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<title>Company Zone</title>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+<!-------------------------------------------- CREATE COUPON------------------------------------------------------------------- -->
+<div ng-controller="myCtrl">
+<button ng-click="createCoupon()" class="btn btn-success" style="margin-left:10px; margin-top:20px;">Create Coupon</button>
+		<div ng-show="showMe">
+			<form id ="createCoup" onsubmit="createCoupon()" " style="margin-left: 10px;"><br>
+			<div class="form-group">
+			<div class="form-group has-success has-feedback">
+			<div class="input-group">
+		    	 <span class="input-group-addon">Title</span>
+		   		 <input type="text" class="form-control" id="title" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div><br> <div class="input-group">
+		    	 <span class="input-group-addon">Price</span>
+		   		 <input type="text" ng-model="val" numbers-only class="form-control" id="price" style="width:150px;"aria-describedby="inputGroupSuccess1Status" >
+		  		</div> <br> <div class="input-group">
+		    	 <span class="input-group-addon">Image</span>
+		   		 <input type="file" class="form-control" id="image" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div> <br> <div class="input-group">
+		    	 <span class="input-group-addon">Start Date dd/mm/yyyy</span>
+		   		 <input type="text"  placeholder="15/11/1990" class="form-control" id="startDate" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div> <br> <div class="input-group">
+		    	 <span class="input-group-addon">End Date dd/mm/yyyy </span>
+		   		 <input type="text"  placeholder="15/11/1990" class="form-control" id="endDate" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div> <br> <div class="input-group">
+		    	 <span class="input-group-addon">Amount</span>
+		   		 <input type="text" ng-model="valu" numbers-only class="form-control" id="amount" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div><br> 
+		  		</div>
+		  		</div>
+						<textarea id="area" class="form-control" rows="3" style="width:150px; " placeholder="Message here"></textarea> <br>
+						<select id = "select"style="margin-left:10px;">
+		 				 <option value="clothes">CLOTHES</option>
+		  				<option value="beauty">BEAUTY</option>
+		  				<option value="electronics">ELECTRONICS</option>
+		  				<option value="food">FOOD</option>
+		  				<option value="fashion">FASHION</option>
+		  				<option value="health">HEALTH</option>
+		  				<option value="other">OTHER</option>
+		  				<option value="things">THINGS_TO_DO</option>
+						</select><br>
+						<input type="submit" class="btn btn-success" style="margin-left:20px;margin-top:20px;"value="Create" />
+						<p id="demo" style="border-bottom-color: black; margin-left: 20px; margin-top: 30px; font-weight: bold;"><mark></mark></p>
+				</form>
+			</div>
+		</div>
+<!-------------------------------------------- REMOVE COUPON------------------------------------------------------------------- -->
+<div ng-controller="myCtrl2">
+		<button ng-click="removeCoupon()" class="btn btn-success" style="margin-left:10px; margin-top:20px;">Remove Coupon</button>
+					<div ng-show="showMe2">
+					<span class="nameSpan"> </span>
+					<form id ="removeCoup" onsubmit="removeCoupon()"  style="margin-left: 10px;"><br>
+					<div class="form-group">
+					<div class="form-group has-success has-feedback">
+		       	 	<div class="input-group">
+		    	 	<span class="input-group-addon">ID</span>
+		   		 	<input type="text" class="form-control" id="id" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div>
+		  		</div>
+		  		</div>
+					<input type="submit" class="btn btn-success" style="margin-left:20px;margin-top:20px;"value="Remove" />
+					<p id="demo2" style="border-bottom-color: black; margin-left: 20px; margin-top: 30px; font-weight: bold;">
+					<h2>Company Coupons Table</h2>
+					    <table class="table table-striped" style="width:800px;">
+					      <tr>
+					        <th>ID</th>
+							<th>Title</th>
+					        <th>Price</th>
+					        <th>Start date</th>
+					        <th>End Date</th>
+					        <th>Amount</th>
+					        <th style=>Message</th>
+					        <th>Type</th>
+					        <th>Image</th>
+					      </tr>
+					      <tr ng-repeat="coupon in coupons | orderBy: 'code' ">
+					        <td>{{coupon.id}}</td>
+							<td>{{coupon.title}}</td>
+					        <td>{{coupon.price}}</td>
+					        <td>{{coupon.startDate|date}}</td>
+					        <td>{{coupon.endDate|date}}</td>
+					        <td>{{coupon.amount}}</td>
+					        <td >{{coupon.message}}</td>
+					        <td>{{coupon.type}}</td>
+					        <td >{{coupon.image}}</td>
+					      </tr>
+					    </table>
+					</form>
+				</div>
+			</div>
+		</div>	
+<!-------------------------------------------- UPDATE COUPON------------------------------------------------------------------- -->
+		<div ng-controller="myCtrl3">
+		<button ng-click="updateCoupon()" class="btn btn-success" style="margin-left:10px; margin-top:20px;">Update Coupon</button>
+					<div ng-show="showMe4">
+					<span class="nameSpan"> </span>
+					<form id ="updateCoup" onsubmit="updateCoupon()"  style="margin-left: 10px;"><br>
+					<div class="form-group">
+					<div class="form-group has-success has-feedback">
+					<div class="input-group">
+		    	 	<span class="input-group-addon">ID</span>
+		   		 	<input type="text" class="form-control" id="id2" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div><br>
+		       	 	<div class="input-group">
+		    	 	<span class="input-group-addon"> End Date dd/mm/yyyy </span>
+		   		 	<input type="text" placeholder="15/11/1990" class="form-control" id="endDate2" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div><br>
+		  		<div class="input-group">
+		    	 	<span class="input-group-addon">Price</span>
+		   		 	<input type="text" class="form-control" id="price2" style="width:150px;"aria-describedby="inputGroupSuccess1Status">
+		  		</div>
+					<input type="submit" class="btn btn-success" style="margin-left:20px;margin-top:20px;"value="Update" />
+					</div>
+					</div>
+					<p id="demo3" style="border-bottom-color: black; margin-left: 20px; margin-top: 30px; font-weight: bold;">
+					<h2>Company Coupons Table</h2>
+					    <table class="table table-striped" style="width:800px;">
+					      <tr>
+					        <th>ID</th>
+							<th>Title</th>
+					        <th>Price</th>
+					        <th>Start date</th>
+					        <th>End Date</th>
+					        <th>Amount</th>
+					        <th style=>Message</th>
+					        <th>Type</th>
+					        <th>Image</th>
+					      </tr>
+					      <tr ng-repeat="coupon in coupons | orderBy: 'code' ">
+					        <td>{{coupon.id}}</td>
+							<td>{{coupon.title}}</td>
+					        <td>{{coupon.price}}</td>
+					        <td>{{coupon.startDate|date}}</td>
+					        <td>{{coupon.endDate|date}}</td>
+					        <td>{{coupon.amount}}</td>
+					        <td >{{coupon.message}}</td>
+					        <td>{{coupon.type}}</td>
+					        <td >{{coupon.image}}</td>
+					      </tr>
+					    </table>
+					</form>
+				</div>
+			</div>
+		</div>	
+<!-------------------------------------------- GET COUPON BY TYPE OR ID------------------------------------------------------------------- -->
+<div ng-controller="myCtrl4">
+	<button ng-click="getType()" class="btn btn-success" style="margin-left:10px; margin-top:20px;">Get Coupon by Type of ID</button>
+		<div ng-show="showMe6">
+			<span class="nameSpan"> </span>
+				<h2>Company Coupons Table</h2>
+					<span class="nameSpan"> </span>
+					<span>Enter ID</span><input type="text" ng-model="searchText"/>
+	
+					<span> or  Select Type</span><select ng-model="select" style="margin-left:10px;">
+		 				 <option value="clothes">CLOTHES</option>
+		  				<option value="beauty">BEAUTY</option>
+		  				<option value="electronics">ELECTRONICS</option>
+		  				<option value="food">FOOD</option>
+		  				<option value="fashion">FASHION</option>
+		  				<option value="health">HEALTH</option>
+		  				<option value="other">OTHER</option>
+		  				<option value="things">THINGS_TO_DO</option>
+		  				<option value="0">All</option>
+						</select><br>
+						    <table class="table table-striped" style="width:800px;">
+						      <tr>
+						        <th>ID</th>
+								<th>Title</th>
+						        <th>Price</th>
+						        <th>Start date</th>
+						        <th>End Date</th>
+						        <th>Amount</th>
+						        <th style=>Message</th>
+						        <th>Type</th>
+						        <th>Image</th>
+						      </tr>
+						      <tr ng-repeat="coupon in coupons | orderBy: 'code' | filter: select | filter: searchID">
+						        <td>{{coupon.id}}</td>
+								<td>{{coupon.title}}</td>
+						        <td>{{coupon.price}}</td>
+						        <td>{{coupon.startDate|date}}</td>
+						        <td>{{coupon.endDate|date}}</td>
+						        <td>{{coupon.amount}}</td>
+						        <td >{{coupon.message}}</td>
+						        <td>{{coupon.type}}</td>
+						        <td >{{coupon.image}}</td>
+						      
+						      </tr>
+						    </table>
+				</div>
+			</div>
+		</div>	
+	<script>
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($scope) {
+	    $scope.showMe = false;
+	    $scope.createCoupon = function() {
+	        $scope.showMe = !$scope.showMe;
+	    }
+	}); 
+	app.directive('numbersOnly', function () {
+	    return {
+	        require: 'ngModel',
+	        link: function (scope, element, attr, ngModelCtrl) {
+	            function fromUser(text) {
+	                if (text) {
+	                    var transformedInput = text.replace(/[^0-9\.]+/g, '');
+
+	                    if (transformedInput !== text) {
+	                        ngModelCtrl.$setViewValue(transformedInput);
+	                        ngModelCtrl.$render();
+	                    }
+	                    return transformedInput;
+	                }
+	                return undefined;
+	            }            
+	            ngModelCtrl.$parsers.push(fromUser);
+	        }
+	    };
+	});
+
+	app.controller('myCtrl2', function($scope,$http) {
+	    $scope.showMe2 = false;
+	    $scope.removeCoupon = function() {
+	        $scope.showMe2 = !$scope.showMe2;
+	        $http.get("http://localhost:8080/CoupService/rest/company/getAllCoup").success(function(data) {
+	            $scope.coupons = data;
+	          });
+	    }
+	}); 
+	app.controller('myCtrl3', function($scope,$http) {
+	    $scope.showMe4 = false;
+	    $scope.updateCoupon = function() {
+	        $scope.showMe4 = !$scope.showMe4;
+	        $http.get("http://localhost:8080/CoupService/rest/company/getAllCoup").success(function(data) {
+	            $scope.coupons = data;
+	          });
+	    }
+	}); 
+	app.controller('myCtrl4', function($scope,$http) {
+		$scope.searchID = function(item){
+			if ($scope.searchText == undefined) {
+				return true;
+			}else if($scope.searchText == 0){
+	      		return true;
+				
+			}else {
+				if (item.id == $scope.searchText)
+					return true;
+			}
+		}
+		$scope.select = function(item){
+			if ($scope.select == undefined) {
+				return true;
+			}else if($scope.select == 0){
+	      		return true;
+				
+			}else {
+				if (item.type == $scope.select)
+					return true;
+			}
+		}
+	    $scope.showMe6 = false;
+	    $scope.getType = function() {
+	        $scope.showMe6 = !$scope.showMe6;
+	        $http.get("http://localhost:8080/CoupService/rest/company/getAllCoup").success(function(data) {
+	            $scope.coupons = data;
+	          });
+	    }
+	});
+	</script>
+	<script>
+	function createCoupon() {
+		var title;
+		var price;
+		var startDate;
+		var endDate;
+		var image;
+		var amount;
+		var message;
+		var type;
+	    var x = document.getElementById("createCoupon");
+	    var e =document.getElementById("select");
+	    title= document.getElementById("title").value;
+	    price= document.getElementById("price").value;
+	    startDate= document.getElementById("startDate").value;
+	    endDate= document.getElementById("endDate").value;
+	    image= document.getElementById("image").value;
+	    amount= document.getElementById("amount").value;
+	    message=document.getElementById("area").value
+	   type= e[e.selectedIndex].text;
+		if(title==""||price==""||startDate==""||endDate==""||image==""||amount==""||message==""||type==""){
+			alert("Please fill all of the areas");
+		}  
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+	      document.getElementById("demo").innerHTML = xhttp.responseText;
+	    }
+	  };
+	  xhttp.open("POST", "http://localhost:8080/CoupService/rest/company/createCoup?title="+title+"&endDate="+endDate+"&startDate="+startDate+"&amount="+amount+"&message="+message+"&image="+image+"&price="+price+"&type="+type, true);
+	  xhttp.send();
+	  document.getElementById("createCoupon").reset();
+	  
+	}
+function removeCoupon(){
+	var id;
+	id = document.getElementById("id").value;
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+	      document.getElementById("demo2").innerHTML = xhttp.responseText;
+	    }
+	  };
+	  xhttp.open("DELETE", "http://localhost:8080/CoupService/rest/company/removeCoup?id="+id, true);
+	  xhttp.send();
+	  document.getElementById("removeCoupon").reset();
+	}
+function updateCoupon(){
+	var id;
+	var endDate;
+	var price;
+	id = document.getElementById("id2").value;
+	endDate = document.getElementById("endDate2").value;
+	price = document.getElementById("price2").value;
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+	      document.getElementById("demo3").innerHTML = xhttp.responseText;
+	    }
+	  };
+	  xhttp.open("PUT", "http://localhost:8080/CoupService/rest/company/updateCoup?endDate="+endDate+"&price="+price+"&id="+id, true);
+	  xhttp.send();
+	  document.getElementById("updateCoup").reset();
+
+	}
+	
+	function getType(){
+	type = document.getElementById("id4").value;
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (xhttp.readyState == 4 && xhttp.status == 200) {
+	    	document.getElementById("demo5").innerHTML = xhttp.responseText;
+	    	
+	    }
+	  };
+	  xhttp.open("GET", "http://localhost:8080/CoupService/rest/company/getCoupByType?type="+type, true);
+	  xhttp.send();
+	  document.getElementById("geType").reset();
+	}
+</script>
+</body>
+</html>

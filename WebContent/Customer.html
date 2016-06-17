@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="windows-1255">
+<title>Customer Login</title>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+<body>
+<div ng-controller="myCtrl">
+<button ng-click="purchaseCoupon()">Purchase Coupon</button>
+		<div ng-show="showMe">
+			<span class="nameSpan"> </span> Enter coupon ID
+			<form id ="purchaseCoupon" onsubmit="purchaseCoupon()">
+				<input type="text" ng-model="val" numbers-only name="id" placeholder="ID"/>
+				<input type="submit" value="Purchase" />
+				<p id="demo"></p>
+			</form>
+		</div>
+	</div>
+	<br>
+<div ng-controller="myCtrl2">
+	<input type="button" ng-click="getAllPurchasedCoupons()" value="Get all Purchased Coupons">
+	<div ng-show="showMe2">
+	<p id="demo2"></p>
+		<h2>Coupons Table</h2>
+    <table class="table table-striped" style="width:800px;">
+      <tr>
+        <th>ID</th>
+		<th>Title</th>
+        <th>Price</th>
+        <th>Start date</th>
+        <th>End Date</th>
+        <th>Amount</th>
+        <th style=>Message</th>
+        <th>Type</th>
+        <th>Image</th>
+      </tr>
+      <tr ng-repeat="coupon in coupons | orderBy: 'code' ">
+        <td>{{coupon.id}}</td>
+		<td>{{coupon.title}}</td>
+        <td>{{coupon.price}}</td>
+        <td>{{coupon.startDate|date}}</td>
+        <td>{{coupon.endDate|date}}</td>
+        <td>{{coupon.amount}}</td>
+        <td >{{coupon.message}}</td>
+        <td>{{coupon.type}}</td>
+        <td >{{coupon.image}}</td>
+      </tr>
+    </table>
+	</div>
+	</div>
+	<br>
+	<div ng-controller="myCtrl3">
+	<button ng-click="getAllPurchasedCouponsByType()">get All Purchased Coupons By Type</button>
+		<div ng-show="showMe3">
+			<span class="nameSpan"> </span> Enter coupon Type
+			<form id ="getByType" onsubmit="getAllPurchasedCouponsByType()">
+				<p id="demo3"></p>
+			</form>
+			<h2> Coupons Table</h2>
+	<span class="nameSpan"> </span>
+					
+	
+					<select ng-model="select" style="margin-left:10px;">
+		 				 <option value="clothes">CLOTHES</option>
+		  				<option value="beauty">BEAUTY</option>
+		  				<option value="electronics">ELECTRONICS</option>
+		  				<option value="food">FOOD</option>
+		  				<option value="fashion">FASHION</option>
+		  				<option value="health">HEALTH</option>
+		  				<option value="other">OTHER</option>
+		  				<option value="things">THINGS_TO_DO</option>
+		  				<option value="0">All</option>
+						</select><br>
+    <table class="table table-striped" style="width:800px;">
+      <tr>
+        <th>ID</th>
+		<th>Title</th>
+        <th>Price</th>
+        <th>Start date</th>
+        <th>End Date</th>
+        <th>Amount</th>
+        <th style=>Message</th>
+        <th>Type</th>
+        <th>Image</th>
+      </tr>
+      <tr ng-repeat="coupon in coupons | orderBy: 'code' | filter: select">
+        <td>{{coupon.id}}</td>
+		<td>{{coupon.title}}</td>
+        <td>{{coupon.price}}</td>
+        <td>{{coupon.startDate|date}}</td>
+        <td>{{coupon.endDate|date}}</td>
+        <td>{{coupon.amount}}</td>
+        <td >{{coupon.message}}</td>
+        <td>{{coupon.type}}</td>
+        <td >{{coupon.image}}</td>
+      </tr>
+    </table>
+		</div>
+	</div>
+		<br>
+		<div ng-controller="myCtrl4">
+	<button ng-click="getAllPurchasedCouponsByPrice()">get All Purchased Coupons By Price</button>
+		<div ng-show="showMe4">
+			<span class="nameSpan"> </span> Enter coupon Price
+			<form id ="getByPrice" onsubmit="getAllPurchasedCouponsByPrice()">
+				<p id="demo4"></p>
+			</form>
+			<h2>Company Coupons Table</h2>
+	<span class="nameSpan"> </span>
+	<input type="text" ng-model="searchText"/>
+    <table class="table table-striped" style="width:800px;" >
+      <tr>
+        <th>ID</th>
+		<th>Title</th>
+        <th>Price</th>
+        <th>Start date</th>
+        <th>End Date</th>
+        <th>Amount</th>
+        <th style=>Message</th>
+        <th>Type</th>
+        <th>Image</th>
+      </tr>
+      <tr ng-repeat="coupon in coupons | orderBy: 'code'| filter: search">
+        <td>{{coupon.id}}</td>
+		<td>{{coupon.title}}</td>
+        <td>{{coupon.price}}</td>
+        <td>{{coupon.startDate|date}}</td>
+        <td>{{coupon.endDate|date}}</td>
+        <td>{{coupon.amount}}</td>
+        <td >{{coupon.message}}</td>
+        <td>{{coupon.type}}</td>
+        <td >{{coupon.image}}</td>
+      </tr>
+    </table>
+		</div>
+	</div>
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.showMe = false;
+    $scope.purchaseCoupon = function() {
+        $scope.showMe = !$scope.showMe;
+    }
+});
+app.directive('numbersOnly', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(text) {
+                if (text) {
+                    var transformedInput = text.replace(/[^0-9]/g, '');
+
+                    if (transformedInput !== text) {
+                        ngModelCtrl.$setViewValue(transformedInput);
+                        ngModelCtrl.$render();
+                    }
+                    return transformedInput;
+                }
+                return undefined;
+            }            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+});
+app.controller('myCtrl2', function($scope,$http) {
+    $scope.showMe2 = false;
+    $scope.getAllPurchasedCoupons = function() {
+        $scope.showMe2 = !$scope.showMe2;
+        $http.get("http://localhost:8080/CoupService/rest/customer/getAllPurchased").success(function(data) {
+            $scope.coupons = data;
+          });
+    }
+});
+app.controller('myCtrl3', function($scope,$http) {
+	$scope.select = function(item){
+		if ($scope.select == undefined) {
+			return true;
+		}else if($scope.select == 0){
+      		return true;
+			
+		}else {
+			if (item.type == $scope.select)
+				return true;
+		}
+	}
+    $scope.showMe3 = false;
+    $scope.getAllPurchasedCouponsByType = function() {
+        $scope.showMe3 = !$scope.showMe3;
+        $http.get("http://localhost:8080/CoupService/rest/customer/getAllPurchased").success(function(data) {
+            $scope.coupons = data;
+          });
+    }
+});
+app.controller('myCtrl4', function($scope,$http) {
+	$scope.search = function(item){
+		if ($scope.searchText == undefined) {
+			return true;
+		}else if($scope.searchText == 0){
+      		return true;
+		}else {
+			if (item.price <= $scope.searchText)
+				return true;
+		}
+	}
+    $scope.showMe4 = false;
+    $scope.getAllPurchasedCouponsByPrice = function() {
+        $scope.showMe4 = !$scope.showMe4;
+        $http.get("http://localhost:8080/CoupService/rest/customer/getAllPurchased").success(function(data) {
+            $scope.coupons = data;
+      	});
+    }
+});
+
+function purchaseCoupon() {
+	var id;
+    var x = document.getElementById("purchaseCoupon");
+    id= x.elements[0].value;
+    
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("POST", "http://localhost:8080/CoupService/rest/customer/purchaseCoupon?id="+id, true);
+  xhttp.send();
+}
+
+</script>
+</body>
+</html>

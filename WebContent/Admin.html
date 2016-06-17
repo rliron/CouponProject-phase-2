@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="windows-1255">
+<title>Admin Login</title>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+<body>
+<div ng-controller="myCtrl">
+<button ng-click="createComp()">Create Company</button>
+		<div ng-show="showMe">
+			<span class="nameSpan"> </span> Enter company name , password & Email
+			<form id ="createComp" onsubmit="createComp()">
+				<input type="text" name="username" placeholder="name"/>
+				<input type="text" name="password" placeholder="password" />
+				<input type="email" name="email" placeholder="email"/> 
+				<input type="submit" value="Create" />
+				<p id="demo"></p>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div ng-controller="myCtrl2">
+<button ng-click="removeComp()">Remove Company</button>
+		<div ng-show="showMe2">
+			<span class="nameSpan"> </span> Enter company ID 
+			<form id ="remove" onsubmit="removeComp()">
+				<input type="text" name="id" placeholder="ID"/>
+				<input type="submit" value="remove" />
+				<p id="demo2"></p>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div ng-controller="myCtrl3">
+	<button ng-click="updateComp()">Update Company</button>
+		<div ng-show="showMe3">
+			<span class="nameSpan"> </span> Enter company ID and it's new password or email
+			<form id ="update" onsubmit="updateComp()">
+			    <input type="text" name="id" placeholder="ID"/>
+				<input type="text" name="password" placeholder="password"/>
+				<input type="email" name="email" placeholder="email"/>
+				<input type="submit" value="Update" />
+				<p id="demo3"></p>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div ng-controller="myCtrl5">
+	<button ng-click="getAllComp()">Get All Companies / By ID</button>
+	<div ng-show="showMe5">
+	<h2>Company  Table</h2>
+	<span>Enter ID</span><br></span><input type= "text" ng-model ="searchText" placeholder = "search Companies"/>
+    <table class="table table-striped" style="width:800px;">
+      <tr>
+        <th>ID</th>
+        <th>Name </th>
+		<th>Password</th>
+        <th>Email</th>
+        <th>Coupons</th>
+      </tr>
+      <tr ng-repeat="company in companies | orderBy: 'code' | filter: search">
+        <td>{{company.id}}</td>
+		<td>{{company.compName}}</td>
+        <td>{{company.password}}</td>
+        <td>{{company.email}}</td>
+        <td>{{company.coupons.length}}</td>
+      </tr>
+    </table>
+	<p id="demo5"></p>
+	</div>
+	</div>
+	<p>----------------------------------------------------------------------------</p>
+	<div ng-controller="myCtrl6">
+	<button ng-click="createCust()">Create Customer</button>
+		<div ng-show="showMe6">
+			<span class="nameSpan"> </span> Enter name and password
+			<form id ="cust" onsubmit="createCust()">
+			    <input type="text" name="name" placeholder="name"/>
+			    <input type="text" name="password" placeholder="password"/>
+				<input type="submit" value="Create" />
+				<p id="demo6"></p>
+			</form>
+		</div>
+	</div>
+	<br>
+		<div ng-controller="myCtrl7">
+	<button ng-click="removeCust()">Remove Customer</button>
+		<div ng-show="showMe7">
+			<span class="nameSpan"> </span> Enter Customer's ID
+			<form id ="removeCustomer" onsubmit="removeCust()">
+			    <input type="text" name="ID" placeholder="ID"/>
+				<input type="submit" value="Remove" />
+				<p id="demo7"></p>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div ng-controller="myCtrl8">
+	<button ng-click="updateCust()">Update Customer</button>
+		<div ng-show="showMe8">
+			<span class="nameSpan"> </span> Enter customer ID and it's new password 
+			<form id ="updateCustomer" onsubmit="updateCust()">
+			    <input type="text" name="id" placeholder="ID"/>
+				<input type="text" name="password" placeholder="password"/>
+				<input type="submit" value="Update" />
+				<p id="demo8"></p>
+			</form>
+		</div>
+	</div>
+		<br>
+		<div ng-controller="myCtrl10">
+	<button ng-click="getAllCust()">Get All Customers/By ID</button>
+	<div ng-show="showMe10">
+	<h2>Customer  Table</h2>
+	<span>Enter ID</span><br></span><input type="text" ng-model="searchText"/>
+    <table class="table table-striped" style="width:800px;">
+      <tr>
+        <th>ID</th>
+        <th>Name </th>
+		<th>Password</th>
+        <th>Coupons</th>
+      </tr>
+      <tr ng-repeat="customer in customers | orderBy: 'code'| filter: search">
+        <td>{{customer.id}}</td>
+		<td>{{customer.custName}}</td>
+        <td>{{customer.password}}</td>
+        <td>{{customer.coupons.length}}</td>
+      </tr>
+    </table>
+	<p id="demo10"></p>
+	</div>
+	</div>
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.showMe = false;
+    $scope.createComp = function() {
+        $scope.showMe = !$scope.showMe;
+    }
+}); 
+app.controller('myCtrl2', function($scope) {
+    $scope.showMe2 = false;
+    $scope.removeComp = function() {
+        $scope.showMe2 = !$scope.showMe2;
+    }
+}); 
+app.controller('myCtrl3', function($scope) {
+    $scope.showMe3 = false;
+    $scope.updateComp = function() {
+        $scope.showMe3 = !$scope.showMe3;
+    }
+}); 
+app.controller('myCtrl5', function($scope,$http) {
+    $scope.search = function(item){
+		if ($scope.searchText == undefined) {
+			return true;
+		}else if($scope.searchText == 0){
+      		return true;
+			
+		}else {
+			if (item.id == $scope.searchText)
+				return true;
+		}
+	}
+    $scope.showMe5 = false;
+    $scope.getAllComp = function() {
+        $scope.showMe5 = !$scope.showMe5;
+          $http.get("http://localhost:8080/CoupService/rest/admin/getAllComp").success(function(data) {
+            $scope.companies = data;
+          });
+    }
+}); 
+app.controller('myCtrl6', function($scope) {
+    $scope.showMe6 = false;
+    $scope.createCust = function() {
+        $scope.showMe6 = !$scope.showMe6;
+    }
+}); 
+app.controller('myCtrl7', function($scope) {
+    $scope.showMe7 = false;
+    $scope.removeCust = function() {
+        $scope.showMe7 = !$scope.showMe7;
+    }
+}); 
+app.controller('myCtrl8', function($scope) {
+    $scope.showMe8 = false;
+    $scope.updateCust = function() {
+        $scope.showMe8 = !$scope.showMe8;
+    }
+}); 
+app.controller('myCtrl10', function($scope,$http) {
+	$scope.search = function(item){
+  		if ($scope.searchText == undefined) {
+  			return true;
+  		}else if($scope.searchText == 0){
+  		return true;
+  		
+  		}else {
+  			if (item.id == $scope.searchText)
+  				return true;
+  		}
+  	}
+    $scope.showMe10 = false;
+    $scope.getAllCust = function() {
+        $scope.showMe10 = !$scope.showMe10;
+            $http.get("http://localhost:8080/CoupService/rest/admin/getAllCust").success(function(data) {
+            	$scope.customers = data;
+            });
+    }
+});
+
+function createComp() {
+	var username;
+	var password;
+	var email;
+    var x = document.getElementById("createComp");
+    username= x.elements[0].value;
+    password= x.elements[1].value;
+    email= x.elements[2].value;
+	if(username==""||password==""||email==""){
+		alert("Please fill all of the areas");
+	}else{
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("GET", "http://localhost:8080/CoupService/rest/admin/createComp?name="+username+"&password="+password+"&email="+email, true);
+  xhttp.send();
+  document.getElementById("createComp").reset();
+}
+}
+
+
+function removeComp() {
+	var id;
+    var x = document.getElementById("remove");
+    id= x.elements[0].value;
+    
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo2").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("DELETE", "http://localhost:8080/CoupService/rest/admin/removeComp?id="+id, true);
+  xhttp.send();
+  document.getElementById("remove").reset();
+}
+function updateComp() {
+	var id;
+	var password;
+	var email;
+    var x = document.getElementById("update");
+    id = x.elements[0].value;
+    password= x.elements[1].value;
+    email= x.elements[2].value;
+    
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo3").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("PUT", "http://localhost:8080/CoupService/rest/admin/updateComp?id="+id+"&password="+password+"&email="+email, true);
+  xhttp.send();
+  document.getElementById("update").reset();
+}
+
+function createCust() {
+	var name;
+	var password;
+    var x = document.getElementById("cust");
+    name= x.elements[0].value;
+    password= x.elements[1].value;
+    if(name==""||password==""){
+		alert("Please fill all of the areas");
+	}else{ 
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo6").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("POST", "http://localhost:8080/CoupService/rest/admin/createCust?name="+name+"&password="+password, true);
+  xhttp.send();
+  document.getElementById("cust").reset();
+}
+}
+function removeCust() {
+	var ID;
+    var x = document.getElementById("removeCustomer");
+    ID= x.elements[0].value;
+    
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo7").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("DELETE", "http://localhost:8080/CoupService/rest/admin/removeCust?id="+ID, true);
+  xhttp.send();
+  document.getElementById("removeCustomer").reset();
+}
+function updateCust() {
+	var id;
+	var password;
+    var x = document.getElementById("updateCustomer");
+    id = x.elements[0].value;
+    password= x.elements[1].value;
+    
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo8").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("PUT", "http://localhost:8080/CoupService/rest/admin/updateCust?id="+id+"&password="+password, true);
+  xhttp.send();
+  document.getElementById("updateCustomer").reset();
+}
+</script>
+</body>
+</html>
